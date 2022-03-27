@@ -1,5 +1,0 @@
-package miu
-
-func Execute() {
-
-}

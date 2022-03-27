@@ -14,8 +14,8 @@ type WorkPool interface {
 }
 
 type Worker struct {
-	id       string    //id
-	exit     chan bool //结束信号
+	id       string
+	exit     chan bool
 	workPool WorkPool
 }
 
@@ -45,19 +45,24 @@ type DefaultWorkPool struct {
 	taskQueue chan Task
 	// 工人集合
 	workers []*Worker
+	// 拒绝策略
+	rejectedHandler RejectedHandler
 }
 
 func NewDefaultWorkPool(workerSize, taskQueueSize int) *DefaultWorkPool {
+	defaultHandler := &DiscardPolicy{}
 	return &DefaultWorkPool{
-		workerSize:    workerSize,
-		taskQueueSize: taskQueueSize,
-		taskQueue:     make(chan Task, taskQueueSize),
+		workerSize:      workerSize,
+		taskQueueSize:   taskQueueSize,
+		taskQueue:       make(chan Task, taskQueueSize),
+		rejectedHandler: defaultHandler,
 	}
 }
 
 func (w *DefaultWorkPool) Execute(task Task) {
 	if len(w.taskQueue) >= w.taskQueueSize {
-		fmt.Printf("the taskQueue is is full, the task[id=%d] has been discarded\n", task.GetTaskId())
+		fmt.Println("the taskQueue is is full")
+		w.rejectedHandler.RejectedExecution(task)
 		return
 	}
 	w.taskQueue <- task
