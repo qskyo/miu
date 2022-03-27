@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/google/uuid"
-	"github.com/qskyo/miu"
+	"github.com/qskyo/miu/core"
 	"sync"
 	"time"
 )
@@ -11,7 +11,7 @@ import (
 var wg sync.WaitGroup
 
 type TestTask struct {
-	miu.BaseTask
+	core.DefaultTask
 }
 
 func (t *TestTask) Run() {
@@ -20,7 +20,7 @@ func (t *TestTask) Run() {
 }
 
 func main() {
-	workPool := miu.NewDefaultWorkPool(2, 10)
+	workPool := core.NewFixedWorkPool(2, 10)
 	workPool.Start()
 	go exec(workPool)
 	time.Sleep(3 * time.Second)
@@ -28,9 +28,9 @@ func main() {
 	time.Sleep(5 * time.Second)
 }
 
-func exec(workPool miu.WorkPool) {
+func exec(workPool core.WorkPool) {
 	for i := 0; i < 30; i++ {
-		task := new(TestTask)
+		task := &TestTask{}
 		task.Id = uuid.NewString()
 		workPool.Execute(task)
 	}
