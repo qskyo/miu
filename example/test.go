@@ -4,11 +4,8 @@ import (
 	"fmt"
 	"github.com/google/uuid"
 	"github.com/qskyo/miu/core"
-	"sync"
 	"time"
 )
-
-var wg sync.WaitGroup
 
 type TestTask struct {
 	core.DefaultTask
