@@ -1,12 +1,8 @@
 # miu
 
----
-
 Miu is a go work pool implementation, which can help you manage gorontine in the project。
 
 ## Installation
-
----
 
 miu requires a Go version with [modules](https://github.com/golang/go/wiki/Modules) support. So make sure to initialize a Go module:
 
@@ -21,8 +17,6 @@ $ go get github.com/qskyo/miu
 ```
 
 ## Quickstart
-
----
 
 ```go
 package main
