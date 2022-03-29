@@ -27,9 +27,10 @@ type DefaultWorkPool struct {
 }
 
 type Worker struct {
-	id       string
-	exit     chan bool
-	workPool WorkPool
+	id   string
+	exit chan bool
+	// 任务（消息）队列
+	taskQueue chan Task
 }
 
 func (worker *Worker) start() {
@@ -40,7 +41,7 @@ func (worker *Worker) start() {
 			fmt.Printf("worker[id=%s] exit\n", worker.id)
 			return
 		// 业务消息
-		case task := <-worker.workPool.GetTaskQueue():
+		case task := <-worker.taskQueue:
 			task.Run()
 		}
 	}

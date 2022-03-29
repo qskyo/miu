@@ -40,9 +40,9 @@ func (w *FixedWorkPool) Start() {
 	workers := make([]*Worker, w.workerSize)
 	for i := 0; i < w.workerSize; i++ {
 		worker := &Worker{
-			id:       uuid.NewString(),
-			exit:     make(chan bool),
-			workPool: w,
+			id:        uuid.NewString(),
+			exit:      make(chan bool),
+			taskQueue: w.taskQueue,
 		}
 		workers[i] = worker
 		go worker.start()
